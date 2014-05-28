@@ -87,4 +87,18 @@ inline int emergency_north_direction(double **mapa, int **new_north_direction_al
   return average_north_direction;
  }
 
+//wykrywamy, czy robot jest aktualnie przenoszony
+inline bool is_robot_moved(Comm::NXTComm comm)
+{
+	NXT::Sensor::SetSonar(&comm, IN_4);
+	int rotations_B = NXT::Motor::GetRotationCount(&comm, OUT_B);
+	int rotations_C = NXT::Motor::GetRotationCount(&comm, OUT_C);
+	int compass_val = NXT::Sensor::GetSonarValue(&comm, IN_4);
+	Wait(500);
+	if((NXT::Motor::GetRotationCount(&comm, OUT_B) > rotations_B) || (NXT::Motor::GetRotationCount(&comm, OUT_C) > rotations_C)) return false;
+	if(abs(NXT::Sensor::GetSonarValue(&comm, IN_4) - compass_val) > 3) return true;
+	return false;
+}
+
 //Basic version (18-05-2014) developed by artem@matman.uwm.edu.pl,
+//Update (22-05-2014) is_robot_moved() developed by £ukasz Traczewski (ltraczewski@gmail.com), Mateusz Kalinowski (m.k.kalinowski@gmail.com)

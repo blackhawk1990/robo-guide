@@ -7,6 +7,7 @@
 #include <string>
 #include <stdexcept>
 #include <conio.h>
+#include <math.h>
 
 //dodatkowe
 #include "NXT++.h"
@@ -162,6 +163,20 @@ int main(){
 		 NXT::Sensor::SetSonarOff(&comm, IN_1);
 		 break;
 		}
+
+	   if(decyzja=='T' || decyzja=='t'){
+		   bool stop = false;
+		   while(!stop)
+		   {
+			   if(is_robot_moved(comm))
+			   {
+				   NXT::PlaySoundFile(&comm,"sadr2d2.rso",1);
+				   Wait(700);
+				   NXT::StopSound(&comm);
+			   }
+			   if(kbhit()) stop = true;
+		   }
+	   }
 
 	   //poczatek lokalizacji
 	   if((decyzja=='Z' || decyzja=='z')){ 
